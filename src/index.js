@@ -1,33 +1,33 @@
 import './style.css';
 
-const tasksList = document.querySelector('.tasks-list');
-const tasks = [
-  {
-    description: 'Learn Javascript',
-    completed: false,
-    index: 1,
-  },
-  {
-    description: 'Go Play',
-    completed: false,
-    index: 2,
-  },
-  {
-    description: 'Run Marathon',
-    completed: false,
-    index: 3,
-  },
-];
+import Tasks from './functionality.js';
 
-function populateTasksSection(tasks) {
-  tasks.forEach((task) => {
-    const item = document.createElement('li');
-    item.classList.add('list-item');
-    item.innerHTML = `<button><i class="fa-regular fa-square"></i></button>
-        <span>${task.description}</span>
-        <i class="fa-solid fa-ellipsis-vertical"></i>`;
-    tasksList.append(item);
-  });
-}
+const tasksList = new Tasks();
 
-populateTasksSection(tasks);
+const newTaskInput = document.querySelector('.enter-task');
+const tasksUL = document.querySelector('.tasks-list');
+
+window.addEventListener('load', () => {
+  if (localStorage.getItem('tasks')) {
+    tasksList.tasksList = JSON.parse(localStorage.getItem('tasks'));
+    if (tasksList.tasksList.length !== 0) {
+      tasksList.tasksList.forEach((item) => {
+        const oldTask = tasksList.createTaskElement(item);
+        tasksUL.append(oldTask);
+      });
+    }
+  }
+});
+
+newTaskInput.addEventListener('keypress', (e) => {
+  if (!e) e = window.event;
+  const keyCode = e.code || e.key;
+  if (keyCode === 'Enter') {
+    e.preventDefault();
+    tasksList.addTask(newTaskInput.value);
+    newTaskInput.value = '';
+    const newTask = tasksList
+      .createTaskElement(tasksList.tasksList[tasksList.tasksList.length - 1]);
+    tasksUL.append(newTask);
+  }
+});
