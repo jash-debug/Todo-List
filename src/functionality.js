@@ -62,7 +62,9 @@ export default class Tasks {
           e.target.blur();
         }
       });
-    } else {
+    } 
+    
+    else {
       item.innerHTML = `<button><i class="fa-regular fa-square-check checkbox checkbox-ticked"></i></button>
       <span class="task-span">${taskObj.description}</span>
       <i class="fa-solid fa-ellipsis-vertical trash-can"></i>`;
@@ -73,10 +75,13 @@ export default class Tasks {
     checkbox.addEventListener('click', () => {
       updateStatus(index, this.tasksList);
       this.updateDisplay();
+      window.load();
     });
+
     return item;
   }
 
+  
   addTask(description) {
     const taskObj = {
       description,
@@ -94,11 +99,13 @@ export default class Tasks {
 
   updateDisplay() {
     const tasks = document.querySelector('ul');
+    console.log(tasks);
     tasks.innerHTML = '';
-    for (let i = 1; i < this.tasksList.length; i += 1) {
+    for (let i = 0; i < this.tasksList.length; i += 1) {
       tasks.append(this.createTaskElement(this.tasksList[i]));
     }
     this.updateClearButton();
+    
   }
 
   removeTask(index) {
@@ -121,4 +128,5 @@ export default class Tasks {
 
     clearBtn.disabled = !itemsCompleted;
   }
+
 }
