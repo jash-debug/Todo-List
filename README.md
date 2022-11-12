@@ -3,6 +3,7 @@
 # To-Do-List
 
 > This project is a simple To Do list application built using Webpack.
+- The list has add, Remove and update functionality
 
 ## Built With
 
