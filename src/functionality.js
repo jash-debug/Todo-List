@@ -3,15 +3,6 @@ export default class Tasks {
     this.tasksList = [];
   }
 
-  removeTask(index) {
-    this.tasksList.splice(index, 1);
-    for (let i = index; i < this.tasksList.length; i += 1) {
-      this.tasksList[i].index = i;
-    }
-    localStorage.setItem('tasks', JSON.stringify(this.tasksList));
-    this.updateDisplay();
-  }
-
   createTaskElement(taskObj) {
     const item = document.createElement('li');
     item.classList.add('list-item');
@@ -23,18 +14,23 @@ export default class Tasks {
     const taskInput = item.querySelector('.task-input');
     const icon = item.querySelector('.trash-can');
 
-    taskInput.addEventListener('focus', () => {
+    taskInput.addEventListener('mouseover', () => {
       item.style.backgroundColor = 'rgb(205, 187, 205)';
       icon.classList.remove('fa-solid');
       icon.classList.remove('fa-ellipsis-vertical');
       icon.classList.add('fa-regular');
       icon.classList.add('fa-trash-can');
       icon.style.cursor = 'pointer';
+
       icon.addEventListener('click', () => {
         const index = parseInt(icon.parentElement.getAttribute('data-index'), 10);
         this.removeTask(index);
         icon.parentElement.remove();
       });
+    });
+
+    item.addEventListener('mouseout', () => {
+      item.style.backgroundColor = 'white';
     });
 
     taskInput.addEventListener('focusout', () => {
@@ -85,8 +81,17 @@ export default class Tasks {
   updateDisplay() {
     const tasks = document.querySelector('ul');
     tasks.innerHTML = '';
-    for (let i = 0; i < this.tasksList.length; i += 1) {
+    for (let i = 1; i < this.tasksList.length; i += 1) {
       tasks.append(this.createTaskElement(this.tasksList[i]));
     }
+  }
+
+  removeTask(index) {
+    this.tasksList.splice(index, 1);
+    for (let i = index; i < this.tasksList.length; i += 1) {
+      this.tasksList[i].index = i;
+    }
+    localStorage.setItem('tasks', JSON.stringify(this.tasksList));
+    this.updateDisplay();
   }
 }
