@@ -1,3 +1,5 @@
+import updateStatus from './status.js';
+
 export default class Tasks {
   constructor() {
     this.tasksList = [];
@@ -7,7 +9,8 @@ export default class Tasks {
     const item = document.createElement('li');
     item.classList.add('list-item');
     item.setAttribute('data-index', taskObj.index);
-    item.innerHTML = `<button><i class="fa-regular fa-square"></i></button>
+    if (taskObj.completed === false) {
+    item.innerHTML = `<button><i class="fa-regular fa-square checkbox"></i></button>
           <input type="text" value="${taskObj.description}" class="task-input">
           <i class="fa-solid fa-ellipsis-vertical trash-can"></i>`;
 
@@ -59,7 +62,19 @@ export default class Tasks {
         e.target.blur();
       }
     });
+  }
+  else {
+    item.innerHTML = `<button><i class="fa-regular fa-square-check checkbox checkbox-ticked"></i></button>
+      <span class="task-span">${taskObj.description}</span>
+      <i class="fa-solid fa-ellipsis-vertical trash-can"></i>`;
+  }
 
+  const checkbox = item.querySelector('.checkbox');
+  const index = parseInt(item.getAttribute('data-index'), 10);
+  checkbox.addEventListener('click', () => {
+    updateStatus(index, this.tasksList);
+    this.updateDisplay();
+  });
     return item;
   }
 
@@ -84,6 +99,7 @@ export default class Tasks {
     for (let i = 1; i < this.tasksList.length; i += 1) {
       tasks.append(this.createTaskElement(this.tasksList[i]));
     }
+    this.updateClearButton();
   }
 
   removeTask(index) {
@@ -93,5 +109,17 @@ export default class Tasks {
     }
     localStorage.setItem('tasks', JSON.stringify(this.tasksList));
     this.updateDisplay();
+  }
+
+  updateClearButton() {
+    const clearBtn = document.querySelector('.clear-btn>button');
+    let itemsCompleted = false;
+    this.tasksList.forEach((item) => {
+      if (item.completed === true) {
+        itemsCompleted = true;
+      }
+    });
+
+    clearBtn.disabled = !itemsCompleted;
   }
 }
