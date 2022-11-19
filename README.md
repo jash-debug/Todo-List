@@ -4,6 +4,8 @@
 
 > This project is a simple To Do list application built using Webpack.
 - The list has add, Remove and update functionality
+- Added test for add and delete tasks
+- Added test for clearall and update status
 
 ## Live Demo
 [Click for the live link](https://jash-debug.github.io/Todo-List/dist/)
