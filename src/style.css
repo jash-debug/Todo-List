@@ -5,6 +5,16 @@
   box-sizing: border-box;
 }
 
+.task-span {
+  text-decoration: line-through;
+  opacity: 0.5;
+  flex: 1;
+}
+
+input.task-input {
+  width: 100%;
+}
+
 ul[role='list'] {
   list-style: none;
   padding: 0;
